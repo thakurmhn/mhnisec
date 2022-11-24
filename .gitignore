@@ -101,6 +101,10 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+# mhnisec
+
+breeze_deploy/app_secrets.yaml
+
 # Environments
 .env
 .venv
