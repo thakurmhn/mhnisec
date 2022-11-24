@@ -3,10 +3,12 @@ from pprint import pprint
 
 # First step is to generate session
 
-bz = BreezeConnect(api_key='8o2B51yPL4299698355J547H)82715&6')
-bz.generate_session(api_secret='K30O0709@653S4*6505`D53277770H61', session_token=2023070)
 
 # Get Historical data
+
+isec_auth = BzAuth(api_key=app_creds['demo_app']['api_key'],
+                       secret_key=app_creds['demo_app']['secret_key'],
+                       )
 
 itc_daily = bz.get_historical_data(
     interval='1day',

@@ -1,9 +1,9 @@
 from breeze_utils import IsecLogin
 from pprint import pprint
 
-isec_login = IsecLogin(api_key='8o2B51yPL4299698355J547H)82715&6',
-                       secret_token='K30O0709@653S4*6505`D53277770H61',
-                       session_token=2023070)
+isec_auth = BzAuth(api_key=app_creds['demo_app']['api_key'],
+                       secret_key=app_creds['demo_app']['secret_key'],
+                       )
 
 bz_conn = isec_login._isec_login()
 bz_live = isec_login._conn_to_live_data()
