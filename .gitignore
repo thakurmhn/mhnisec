@@ -104,6 +104,7 @@ celerybeat.pid
 # mhnisec
 
 breeze_deploy/app_secrets.yaml
+api-keys
 
 # Environments
 .env
