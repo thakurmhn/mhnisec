@@ -105,7 +105,8 @@ celerybeat.pid
 
 breeze_deploy/app_secrets.yaml
 api-keys
-
+mhnapp/secret_token.yaml
+mhnapp/Data/
 # Environments
 .env
 .venv
@@ -132,3 +133,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.idea/

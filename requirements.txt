@@ -2,7 +2,7 @@ async-generator==1.10
 attrs==22.1.0
 bidict==0.22.0
 breeze-connect==1.0.23
-certifi @ file:///croot/certifi_1665076670883/work/certifi
+# certifi @ file:///croot/certifi_1665076670883/work/certifi
 charset-normalizer==2.1.1
 exceptiongroup==1.0.4
 h11==0.14.0

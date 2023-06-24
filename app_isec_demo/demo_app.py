@@ -3,9 +3,9 @@ from pprint import pprint
 
 app_creds = BzAuth._get_api_creds()
 
-isec_auth = BzAuth(api_key=app_creds['demo_app']['api_key'],
-                       secret_key=app_creds['demo_app']['secret_key'],
-                       )
+isec_auth = BzAuth(api_key=app_creds['myapp']['api_key'], secret_key=app_creds['myapp']['secret_key'])
+
+print(isec_auth._get_encoded_api_key())
 
 bz = isec_auth._isec_login()
 # Demo historical data

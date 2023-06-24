@@ -4,15 +4,13 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from time import sleep
 import json
 import urllib.parse
-import yaml
-from yaml.loader import BaseLoader
+
 
 import logging
 LOG = logging.getLogger(__name__)
 
 
-
-class BzAuth():
+class BzAuth:
     """
     Class to create login to Isec breeze API
     :param api_key
@@ -29,7 +27,6 @@ class BzAuth():
 
 
     def _isec_login(self):
-
         _bz_conn = BreezeConnect(api_key=self.api_key)
         _bz_conn.generate_session(api_secret=self.secret_key, session_token=self.session_token)
 
@@ -41,12 +38,13 @@ class BzAuth():
 
     def _get_session_token(self):
 
+        _session_token = ''
         _caps = DesiredCapabilities.CHROME
         _caps['goog:loggingPrefs'] = {'performance': 'ALL'}
         _driver = webdriver.Chrome(desired_capabilities=_caps)
 
         _driver.get(self.session_token_gen_url)
-        sleep(45)
+        sleep(60)
         _logs_raw = _driver.get_log('performance')
         _logs = [json.loads(lr["message"])["message"] for lr in _logs_raw]
 
@@ -65,28 +63,4 @@ class BzAuth():
         _session_token = int(_session_token)
         return _session_token
 
-    @staticmethod
-    def _get_api_creds():
-        with open('../breeze_deploy/app_secrets.yaml', 'r') as stream:
 
-            try:
-                # Converts yaml document to python object
-                app_secrets_dict = yaml.load(stream, Loader=BaseLoader)
-                for key, val in app_secrets_dict.items():
-                    print(key, " : ", val, "\n")
-            except yaml.YAMLError as e:
-                LOG.info(e)
-
-
-        return app_secrets_dict
-
-    def _conn_to_live_data(self):
-
-        _isec_login = self._isec_login()
-
-        return _isec_login.ws_connect()
-
-    def _disconnect_live_data(self):
-        _isec_login = self._isec_login()
-
-        return _isec_login.ws_disconnect()
