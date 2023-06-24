@@ -4,6 +4,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from time import sleep
 import json
 import urllib.parse
+import os
 
 
 import logging
@@ -23,7 +24,7 @@ class BzAuth:
         self.secret_key = secret_key
         self.encoded_api_key = self._get_encoded_api_key()
         self.session_token_gen_url = 'https://api.icicidirect.com/apiuser/login?api_key=' + self.encoded_api_key
-        self.session_token = self._get_session_token()
+        # self.session_token = self._get_session_token(app_name=app_name)
 
 
     def _isec_login(self):
@@ -36,8 +37,12 @@ class BzAuth:
         encoded_api_key = urllib.parse.quote(self.api_key)
         return encoded_api_key
 
-    def _get_session_token(self):
+    def get_session_token(self):
 
+        _app_key = self.api_key
+        _app_secret = self.secret_key
+        cwd = os.getcwd()
+        _token_file = f"{cwd}/secret_token.yaml"
         _session_token = ''
         _caps = DesiredCapabilities.CHROME
         _caps['goog:loggingPrefs'] = {'performance': 'ALL'}
@@ -61,6 +66,9 @@ class BzAuth:
                         _driver.quit()
 
         _session_token = int(_session_token)
-        return _session_token
+        f = open(_token_file, 'w')
+        f.write(f"api_key: {_app_key}\napp_secret: {_app_secret}\nsession_token: {_session_token}")
+        f.close()
 
-
+        print(f"session information stored in {_token_file}")
+        return None

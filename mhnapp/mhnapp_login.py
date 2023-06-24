@@ -23,6 +23,7 @@ def login_to_isec():
     f.close()
 
 
+
 def get_session_creds():
     _secret_dict = ''
     with open('secret_token.yaml', 'r') as file:
@@ -30,6 +31,8 @@ def get_session_creds():
 
         _secret_dict = isec_secret
     return _secret_dict
+
+
 
 
 if __name__ == '__main__':
