@@ -1,0 +1,35 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 12 11:44:18 2023
+
+@author: mohan
+"""
+
+from breeze_connect import BreezeConnect
+import yaml
+import time
+
+
+file = open('secret_token.yaml', 'r')
+secret_dict = yaml.load(file, Loader=yaml.FullLoader)
+app_key = secret_dict['api_key']
+app_secret = secret_dict['app_secret']
+app_session = secret_dict['session_token']
+
+breeze = BreezeConnect(api_key=app_key)
+breeze.generate_session(api_secret=app_secret,
+                        session_token=app_session)
+breeze.ws_connect()
+
+#data = None
+
+
+def on_ticks(ticks):
+    global data
+    data = ticks
+    #print("Ticks: {}".format(ticks))
+    print(data)
+    
+    
+    

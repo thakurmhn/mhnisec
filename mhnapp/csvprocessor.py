@@ -21,6 +21,7 @@ class CsvProcessor:
         df.rename(columns=rename_col, inplace=True)
         column_series = df.Series
         column_exchangecode = df.ExchangeCode
+        column_company = df.CompanyName
 
         for ex_code, series in zip(column_exchangecode, column_series):
             if series == 'EQ':
@@ -28,16 +29,16 @@ class CsvProcessor:
 
 
         icic_codes = []
-
+        
+        
         for i in range(0, len(exchange_codes)):
             s = df.loc[df.ExchangeCode == exchange_codes[i]]
             icic_codes.append(s.iloc[0, 0])
             i = i + 1
-
+            
         return icic_codes
 
-
-
+   
 
 if __name__ == '__main__':
 

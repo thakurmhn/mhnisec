@@ -1,0 +1,36 @@
+import pandas as pd
+import os
+
+
+class CsvProcessor:
+
+    def __init__(self):
+        self.csv_file = f"{os.getcwd()}/Data/NSEScripMaster.txt"
+
+    def get_icici_stock_details(self):
+        icici_stock_details = []
+        df = pd.read_csv(self.csv_file)
+
+        # Remove extra "" from column names
+        df = df[[' "ShortName"', ' "CompanyName"', ' "ExchangeCode"', ' "Series"']]
+        column1 = [' "ShortName"', ' "CompanyName"', ' "ExchangeCode"', ' "Series"']
+        column2 = ['ShortName', 'CompanyName', 'ExchangeCode', 'Series']
+        rename_col = dict(zip(column1, column2))
+        df.rename(columns=rename_col, inplace=True)
+
+        for index, row in df.iterrows():
+            if row['Series'] == 'EQ':
+                icici_stock_details.append((row['ShortName'], row['CompanyName']))
+
+        return icici_stock_details
+
+
+if __name__ == '__main__':
+    csv = CsvProcessor()
+    stock_details = csv.get_icici_stock_details()
+
+    stock_codes = {}
+    for short_name, company_name in stock_details:
+        print(f"ShortName: {short_name}, CompanyName: {company_name}")
+        
+

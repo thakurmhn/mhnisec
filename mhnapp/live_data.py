@@ -1,6 +1,8 @@
 
 from breeze_connect import BreezeConnect
 import yaml
+import time
+
 
 file = open('secret_token.yaml', 'r')
 secret_dict = yaml.load(file, Loader=yaml.FullLoader)
@@ -13,18 +15,46 @@ breeze.generate_session(api_secret=app_secret,
                         session_token=app_session)
 breeze.ws_connect()
 
-data = None
+#data = None
 
 
 def on_ticks(ticks):
     global data
     data = ticks
     #print("Ticks: {}".format(ticks))
+    print(data)
 
 
 breeze.on_ticks = on_ticks
-breeze.subscribe_feeds(stock_token="37517")
-#print(breeze.subscribe_feeds(exchange_code="NFO", stock_code="TCS", product_type="options", expiry_date="31-Aug-2023", strike_price="3200", right="Call", get_exchange_quotes=True, get_market_depth=False))
+#print(breeze.subscribe_feeds(stock_token="7041"))
 
-# breeze.subscribe_feeds(exchange_code="NFO", stock_code="TCS", product_type="options", expiry_date="31-Aug-2023", strike_price="3200", right="Call", get_exchange_quotes=True, get_market_depth=False)
-print(data)
+
+data = breeze.subscribe_feeds(exchange_code="NFO", 
+                              stock_code="TCS",
+                              product_type="options",
+                              expiry_date="27-July-2023",
+                              strike_price="3200", right="Call",
+                              get_exchange_quotes=True,
+                              get_market_depth=False)
+
+# =============================================================================
+# data = breeze.subscribe_feeds(exchange_code="NFO",
+#                               stock_code="NIITEC",
+#                               product_type="options",
+#                               expiry_date="27-July-2023",
+#                               strike_price="5100", right="Call",
+#                               get_exchange_quotes=True,
+#                               get_market_depth=False)
+# =============================================================================
+
+time.sleep(300)
+
+data = breeze.unsubscribe_feeds(exchange_code="NFO", 
+                              stock_code="TCS",
+                              product_type="options",
+                              expiry_date="31-Aug-2023",
+                              strike_price="3200", right="Call",
+                              get_exchange_quotes=True,
+                              get_market_depth=False)
+
+

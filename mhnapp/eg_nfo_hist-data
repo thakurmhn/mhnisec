@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jul  9 10:18:53 2023
+
+@author: mohan
+"""
+
+from breeze_connect import BreezeConnect
+from breeze_deploy.bzutils import BzUtils
+
+import pandas as pd
+
+bzutils = BzUtils()
+
+# creds dict
+creds = bzutils.get_api_creds()
+breeze = BreezeConnect(api_key=creds['api_key'])
+breeze.generate_session(api_secret=creds['app_secret'],
+                        session_token=creds['session_token'])
+
+
+start_date = "2023-07-07T07:00:00.000Z"
+
+end_date = "2023-07-07T18:00:00.000Z"
+
+expiry = "2023-07-27T07:00:00.000Z"
+
+time_interval = "1minute"
+
+strike = 19500
+
+# downloading historical data for put option contract 
+
+data1 = breeze.get_historical_data(interval = time_interval,
+
+                            from_date = start_date,
+
+                            to_date = end_date,
+
+                            stock_code = "NIFTY",
+
+                            exchange_code = "NFO",
+
+                            product_type = "options",
+
+                            expiry_date = expiry,
+
+                            right = "put",
+
+                            strike_price = strike)
+
+put_data = pd.DataFrame(data1["Success"])
+
+
+# downloading historical data for Nifty
+
+data2 = breeze.get_historical_data(interval = time_interval,
+
+                            from_date = start_date,
+
+                            to_date = end_date,
+
+                            stock_code = "NIFTY",
+
+                            exchange_code = "NSE",
+
+                            product_type = "cash")
+
+stock_data = pd.DataFrame(data2["Success"])
+
+
+# Transforming downloaded data into excel format
+
+put_data.to_csv(index=False)
+
+put_data.to_csv('hist_data/Nifty_put_data.csv')
+
+
+stock_data.to_csv(index=False)
+
+stock_data.to_csv('hist_data/Nifty_index_data.csv')

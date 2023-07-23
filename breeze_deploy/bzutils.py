@@ -3,6 +3,7 @@ from yaml.loader import BaseLoader
 import os
 from pprint import pprint
 from breeze_connect import BreezeConnect
+from datetime import datetime
 
 class BzUtils:
 
@@ -53,6 +54,7 @@ class BzUtils:
         breeze = self.breeze
         bz_session = self.bz_session
         customer_details = breeze.get_customer_details(api_session=self.session_token)
+        print(self.session_token)
         return customer_details
 
     @property
@@ -69,18 +71,28 @@ class BzUtils:
         holdings = breeze.get_demat_holdings()
         return holdings
 
-    def websocket_conn(self):
-        breeze = self.breeze
-        bz_session = self.bz_session
-        web_soc = breeze.ws_connect()
+    @staticmethod
+    def get_datetime_iso(month, day, date, time, year=2023):
+        try:
+            # Construct the datetime string
+            datetime_str = f"{year}-{month:02d}-{date:02d}T{time}"
 
-    def bz_websocket(self):
-        return self.websocket_conn()
+            # Parse the datetime string
+            parsed_datetime = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
 
-class TickHandler:
-    def __init__(self):
-        self.bzutils = BzUtils()
-        self.websocket = self.bzutils.websocket_conn()
+            # Convert the parsed datetime to the desired format
+            iso_format = parsed_datetime.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+            # Return the datetime in the desired format
+            return iso_format
+        except ValueError:
+            return "Invalid datetime parameters. Please provide valid month, date, and time."
+
+if __name__ == '__main__':
+    bz = BzUtils()
+    pprint(bz.bz_session)
+
+
 
 
 

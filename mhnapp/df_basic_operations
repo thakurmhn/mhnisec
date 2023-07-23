@@ -1,0 +1,68 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Jul 15 14:23:04 2023
+
+@author: mohan
+"""
+
+from breeze_connect import BreezeConnect
+from breeze_deploy.bzutils import BzUtils
+import pandas as pd
+import datetime as dt
+
+
+bzutils = BzUtils()
+
+
+from_date = dt.datetime.today() - dt.timedelta(days=3650)
+start_date = from_date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+to_date = dt.datetime.today()
+end_date = to_date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+timeframe = '1day'
+tickers = ['ITC', 'TCS', 'RELIND']
+exchange = 'NSE'
+segment = 'cash'
+
+# creds dict
+creds = bzutils.get_api_creds()
+breeze = BreezeConnect(api_key=creds['api_key'])
+breeze.generate_session(api_secret=creds['app_secret'],
+                        session_token=creds['session_token'])
+
+cl_prices = pd.DataFrame()
+
+   
+for ticker in tickers: 
+    data =  breeze.get_historical_data_v2(interval=timeframe,
+                                from_date=start_date,
+                                to_date=end_date,
+                                stock_code=ticker,
+                                exchange_code=exchange,
+                                product_type=segment)
+       
+    
+    stock_data = pd.DataFrame(data["Success"])
+    
+    cl_prices[ticker] = stock_data['close']
+
+
+cl_prices.set_index(stock_data['datetime'], inplace=True)
+cl_prices.dropna(axis=0, how='any', inplace=True) 
+
+# Basic Operations on DF
+
+cl_prices.head()
+cl_prices.tail()
+
+cl_prices.mean() # calculates average price
+cl_prices.median() # calculates median
+cl_prices.std() # Calculates standard deviation
+cl_prices.describe()
+
+daily_return = cl_prices.pct_change() #Creates dataframe with daily return for each stock
+daily_return = cl_prices/cl_prices.shift(1) - 1 # same as above
+
+daily_return.mean(axis=1) #prints mean daily return for each stock
+daily_return.std() #prints standard deviation of daily returns for each stock
