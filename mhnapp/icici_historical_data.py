@@ -73,4 +73,6 @@ stock_data = pd.DataFrame(data['Success'])
 # Create a blank Dataframe
 ohlc_data = pd.DataFrame()
 ohlc_data = stock_data[['datetime', 'open', 'high', 'low', 'close']]
+
 ohlc_data.set_index('datetime', inplace=True)
+

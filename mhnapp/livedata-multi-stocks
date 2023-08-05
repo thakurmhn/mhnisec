@@ -6,10 +6,12 @@ Created on Wed Jul 12 11:44:18 2023
 @author: mohan
 """
 
-from breeze_connect import BreezeConnect
+import pandas as pd
+import asyncio
 import yaml
-import time
 
+# Import the required classes or functions from the "breeze" library
+from breeze_connect import BreezeConnect
 
 file = open('secret_token.yaml', 'r')
 secret_dict = yaml.load(file, Loader=yaml.FullLoader)
@@ -18,18 +20,52 @@ app_secret = secret_dict['app_secret']
 app_session = secret_dict['session_token']
 
 breeze = BreezeConnect(api_key=app_key)
-breeze.generate_session(api_secret=app_secret,
-                        session_token=app_session)
+breeze.generate_session(api_secret=app_secret, session_token=app_session)
+
+df = pd.DataFrame(columns=["timestamp", "open", "high", "low", "close", "volume"])
+
 breeze.ws_connect()
 
-#data = None
-
-
 def on_ticks(ticks):
-    global data
-    data = ticks
-    #print("Ticks: {}".format(ticks))
-    print(data)
-    
-    
-    
+    global df
+    for tick in ticks:
+        new_data = {
+            "timestamp": tick["timestamp"],
+            "open": tick["open"],
+            "high": tick["high"],
+            "low": tick["low"],
+            "close": tick["close"],
+            "volume": tick["volume"],
+        }
+        df = df.append(new_data, ignore_index=True)
+        
+    print(df)
+
+async def handle_data_stream():
+    async for ticks in breeze.subscribe_feeds(exchange_code="NSE",
+                                              stock_code="ITC",
+                                              product_type="cash",
+                                              interval="1minute"):
+        on_ticks(ticks)
+
+if __name__ == "__main__":
+
+    loop = asyncio.get_event_loop()
+# =============================================================================
+#     try:
+#         loop.run_until_complete(handle_data_stream())
+#     except KeyboardInterrupt:
+#         pass
+# =============================================================================
+
+
+    data_stream_task = asyncio.ensure_future(handle_data_stream())
+
+    try:
+        loop.run_forever()
+    except KeyboardInterrupt:
+        # Cancel the task to gracefully exit the event loop
+        data_stream_task.cancel()
+        loop.run_until_complete(data_stream_task)
+    finally:
+        loop.close()
