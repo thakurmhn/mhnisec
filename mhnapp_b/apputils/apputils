@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Jul  9 11:04:43 2023
+
+@author: mohan
+"""
+
+from datetime import datetime
+
+def get_date_iso(date):
+    try:
+        # Parse the given date string
+        parsed_date = datetime.strptime(date, "%Y-%m-%d")
+
+        # Convert the parsed date to ISO format
+        #iso_format = parsed_date.date().isoformat()
+        
+        iso_format = parsed_date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+        # Print the date in ISO format
+        #print("Date in ISO format:", iso_format)
+        date_iso = iso_format
+    except ValueError:
+        print("Invalid date format. Please provide the date in the format 'YYYY-MM-DD'.")
+    
+    return date_iso
+
+
+def get_datetime_iso(month, day, date, time, year=2023):
+    try:
+        # Construct the datetime string
+        datetime_str = f"{year}-{month:02d}-{date:02d}T{time}"
+
+        # Parse the datetime string
+        parsed_datetime = datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S")
+
+        # Convert the parsed datetime to the desired format
+        iso_format = parsed_datetime.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+        # Return the datetime in the desired format
+        return iso_format
+    except ValueError:
+        return "Invalid datetime parameters. Please provide valid month, date, and time."
+
+
+if __name__ == '__main__':
+    
+    # Example usage
+    month = 7
+    date = 7
+    day = "Friday"
+    time = "07:00:00"
+    
+    datetime_iso = get_datetime_iso(month, day, date, time)
+    print("Datetime in desired format:", datetime_iso)
