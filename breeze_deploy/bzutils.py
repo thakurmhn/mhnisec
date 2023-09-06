@@ -9,7 +9,8 @@ class BzUtils:
 
     def __init__(self):
 
-        self.secret_file = f"{os.getcwd()}/secret_token.yaml"
+        self.secret_file = "/home/mohan/mhnisec/mhnapp_b/secret_token.yaml"
+        #self.secret_file = f"{os.getcwd()}/secret_token.yaml"
         # self.breeze = BreezeConnect(api_key=self.api_key)
         # self.bz_session = self.breeze.generate_session(api_secret=self.app_secret, session_token=self.session_token)
 

@@ -25,6 +25,7 @@ class BzAuth:
         self.encoded_api_key = self._get_encoded_api_key()
         self.session_token_gen_url = 'https://api.icicidirect.com/apiuser/login?api_key=' + self.encoded_api_key
         # self.session_token = self._get_session_token(app_name=app_name)
+        #self.token_file = f"{cwd}/apputils/secret_token.yaml"
 
 
     def _isec_login(self):
@@ -42,7 +43,7 @@ class BzAuth:
         _app_key = self.api_key
         _app_secret = self.secret_key
         cwd = os.getcwd()
-        _token_file = f"{cwd}/secret_token.yaml"
+        _token_file =  f"{cwd}/secret_token.yaml"
         _session_token = ''
         _caps = DesiredCapabilities.CHROME
         _caps['goog:loggingPrefs'] = {'performance': 'ALL'}
